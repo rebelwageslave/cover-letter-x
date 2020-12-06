@@ -1,0 +1,15 @@
+{
+  "name": "Cover Letter X",
+  "version": "0.0.1",
+  "description": "Easy paste the generated cover letters",
+  "manifest_version": 2,
+  "permissions": ["storage", "declarativeContent", "activeTab"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "options_page": "options.html",
+  "page_action": {
+    "default_popup": "popup.html"
+  }
+}
