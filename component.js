@@ -3,15 +3,12 @@
 //     replace: "bar"
 // }
 
+const bus = new Vue()
+
+
 
 Vue.component('variable', {
-    props: ['findProp', 'replaceProp'],
-    data: function () {
-        return {
-            find: this.findProp,
-            replace: this.replaceProp
-        }
-    },
+    props: ['find', 'replace'],
     template: `<div class="card">
   <div class="card-body bg-light">
         <form class="form-inline">
@@ -22,9 +19,17 @@ Vue.component('variable', {
   <div class="input-group mb-2 mr-sm-2">
     <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="ex: Jhon"  v-model="replace">
   </div>
+   <div class="input-group mb-2 mr-sm-2">
+    <button class="btn btn-danger btn-sm" v-on:click="removeElement(index)">Delete</button>
+  </div>
 </form>
   </div>
-</div>`
+</div>`,
+    methods: {
+        removeElement() {
+            bus.$emit("remove-element", )
+        }
+    }
 })
 
 
@@ -34,11 +39,12 @@ Vue.component('variable-list', {
 
         <template v-for="variable in variableList">
             
-                    <variable :find-prop="variable.find" :replace-prop="variable.replace"></variable>
+                    <variable :find-prop="variable.find" :replace="variable.replace"></variable>
                
             </template>
             <br/>
-            <button class="btn btn-lg btn-primary" @click="addNewVariable()">Add new variable</button>
+            <button class="btn btn-sm btn-primary" @click="addNewVariable()">Add new variable</button>
+            <button class="btn btn-sm btn-success" @click="saveVariables()">Save</button>
     `,
 
     data() {
@@ -51,8 +57,13 @@ Vue.component('variable-list', {
         addNewVariable() {
             this.variableList.push({
                 find: "",
-                "replace": ""
+                replace: ""
             })
+        },
+
+        saveVariables() {
+            console.log(this.variableList)
+            chrome.storage.sync.set({"variableList": this.variableList})
         }
 
     },
@@ -65,8 +76,8 @@ Vue.component('variable-list', {
             let list = data.variableList
             if (!list) {
                 list = [{
-                    find: "{NAME}",
-                    replace: "Jhon"
+                    find: "",
+                    replace: ""
                 }]
             }
             Vue.set(self, "variableList", list)
