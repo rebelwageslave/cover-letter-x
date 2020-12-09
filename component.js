@@ -8,26 +8,26 @@ const bus = new Vue()
 
 
 Vue.component('variable', {
-    props: ['find', 'replace'],
+    props: ['variable', 'index'],
     template: `<div class="card">
   <div class="card-body bg-light">
         <form class="form-inline">
   <label class="sr-only" for="inlineFormInputName2">Variable</label>
-  <input type="text" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="{NAME}" v-model="find">
+  <input type="text" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="{NAME}" v-model="variable.find">
     &nbsp; in the template will be replaced with &nbsp;
   <label class="sr-only" for="inlineFormInputGroupUsername2">Value</label>
   <div class="input-group mb-2 mr-sm-2">
-    <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="ex: Jhon"  v-model="replace">
+    <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="ex: Jhon"  v-model="variable.replace">
   </div>
    <div class="input-group mb-2 mr-sm-2">
-    <button class="btn btn-danger btn-sm" v-on:click="removeElement(index)">Delete</button>
+    <button class="btn btn-danger btn-sm" @click="removeElement()" type="button">Delete</button>
   </div>
 </form>
   </div>
 </div>`,
     methods: {
         removeElement() {
-            bus.$emit("remove-element", )
+            bus.$emit("remove-element", this.index )
         }
     }
 })
@@ -37,9 +37,9 @@ Vue.component('variable-list', {
 
     template: `
 
-        <template v-for="variable in variableList">
+        <template v-for="(variable, i) in variableList">
             
-                    <variable :find-prop="variable.find" :replace="variable.replace"></variable>
+                    <variable :variable="variable" :index="i"></variable>
                
             </template>
             <br/>
@@ -52,6 +52,7 @@ Vue.component('variable-list', {
             variableList: []
         }
     },
+
 
     methods: {
         addNewVariable() {
@@ -81,6 +82,10 @@ Vue.component('variable-list', {
                 }]
             }
             Vue.set(self, "variableList", list)
+        })
+
+        bus.$on('remove-element', function ( index ) {
+            self.variableList.splice(index, 1);
         })
     }
 
