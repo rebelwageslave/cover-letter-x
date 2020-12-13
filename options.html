@@ -35,9 +35,9 @@
 
 <script type="text/x-template" id="variable_list_template">
     <div>
-           <template v-for="(variable, i) in variableList">
+           <template v-for="(index, variable) in variableList">
             
-                    <variable  :variable.sync="variable" :index="i"></variable>
+                    <variable  :variable.sync="variable" :index="index"></variable>
                
             </template>
             <br/>
@@ -53,11 +53,12 @@
   <div class="card-body bg-light">
         <form class="form-inline">
   <label class="sr-only" for="inlineFormInputName2">Variable</label>
-  <input type="text" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="{NAME}" v-model="variable.find">
+  <input type="text" class="form-control mb-2 mr-sm-2" placeholder="{NAME}" :value="variable.find"
+  @keyup="this.updateParent($event.target.value, 'find')">
     &nbsp; in the template will be replaced with &nbsp;
   <label class="sr-only" for="inlineFormInputGroupUsername2">Value</label>
   <div class="input-group mb-2 mr-sm-2">
-    <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="ex: Jhon"  v-model="variable.replace">
+    <input type="text" class="form-control"  placeholder="ex: Jhon"  :value="variable.replace" @keyup="this.updateParent($event.target.value, 'replace')">
   </div>
    <div class="input-group mb-2 mr-sm-2">
     <button class="btn btn-danger btn-sm" @click="removeElement()" type="button">Delete</button>

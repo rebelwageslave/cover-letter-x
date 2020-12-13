@@ -6,13 +6,19 @@
 const bus = new Vue()
 
 
-
+/**
+* A single variable template, sync the props
+* to the parent element.
+**/
 Vue.component('variable', {
     props: ['variable', 'index'],
     template: '#variable_template',
     methods: {
         removeElement() {
             bus.$emit("remove-element", this.index )
+        },
+        updateParent(value, type) {
+            bus.$emit( "update:"+type, this.index, value)
         }
     }
 })
@@ -38,7 +44,6 @@ Vue.component('variable-list', {
         },
 
         saveVariables() {
-            console.log(this.variableList)
             chrome.storage.sync.set({"variableList": this.variableList})
         }
 
@@ -61,6 +66,15 @@ Vue.component('variable-list', {
 
         bus.$on('remove-element', function ( index ) {
             self.variableList.splice(index, 1);
+        })
+
+        bus.$on( "update:find", function (index, value) {
+            self.variableList[index].find = value
+        })
+
+        bus.$on( "update:replace", function (index, value) {
+              self.variableList[index].replace = value
+            
         })
     }
 
