@@ -7,18 +7,18 @@ const bus = new Vue()
 
 
 /**
-* A single variable template, sync the props
-* to the parent element.
-**/
+ * A single variable template, sync the props
+ * to the parent element.
+ **/
 Vue.component('variable', {
     props: ['variable', 'index'],
     template: '#variable_template',
     methods: {
         removeElement() {
-            bus.$emit("remove-element", this.index )
+            bus.$emit("remove-element", this.index)
         },
         updateParent(value, type) {
-            bus.$emit( "update:"+type, this.index, value)
+            bus.$emit("update:" + type, this.index, value)
         }
     }
 })
@@ -43,10 +43,6 @@ Vue.component('variable-list', {
             })
         },
 
-        saveVariables() {
-            chrome.storage.sync.set({"variableList": this.variableList})
-        }
-
     },
 
     created: function () {
@@ -64,20 +60,41 @@ Vue.component('variable-list', {
             Vue.set(self, "variableList", list)
         })
 
-        bus.$on('remove-element', function ( index ) {
+        bus.$on('remove-element', function (index) {
             self.variableList.splice(index, 1);
         })
 
-        bus.$on( "update:find", function (index, value) {
+        bus.$on("update:find", function (index, value) {
             self.variableList[index].find = value
         })
 
-        bus.$on( "update:replace", function (index, value) {
-              self.variableList[index].replace = value
-            
+        bus.$on("update:replace", function (index, value) {
+            self.variableList[index].replace = value
+
         })
     }
 
 })
 
-new Vue({el: '#variables'})
+new Vue(
+    {
+        el: '#variables',
+        data : {
+            coverLetter: "",
+        },
+        created: function () {
+            const self = this
+            chrome.storage.sync.get("coverLetter", function (data) {
+                Vue.set(self, "coverLetter", data.coverLetter)
+            })
+        },
+        methods: {
+            saveVariables() {
+                chrome.storage.sync.set({"variableList": this.variableList})
+                chrome.storage.sync.set({"coverLetter": this.coverLetter})
+                alert("Settings saved")
+            }
+        }
+
+    },
+)
