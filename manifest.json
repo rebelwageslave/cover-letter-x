@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "Easy paste the generated cover letters",
   "manifest_version": 2,
-  "permissions": ["storage", "contextMenus"],
+  "permissions": [   "activeTab",
+    "tabs", "storage", "contextMenus"],
   "background": {
     "scripts": ["background.js"],
     "persistent": false

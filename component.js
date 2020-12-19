@@ -23,7 +23,9 @@ Vue.component('variable', {
     }
 })
 
-
+/**
+ * List of variables.
+ */
 Vue.component('variable-list', {
 
     template: '#variable_list_template',
@@ -41,6 +43,7 @@ Vue.component('variable-list', {
                 find: "",
                 replace: ""
             })
+            chrome.storage.sync.set({"variableList": this.variableList})
         },
 
     },
@@ -62,14 +65,17 @@ Vue.component('variable-list', {
 
         bus.$on('remove-element', function (index) {
             self.variableList.splice(index, 1);
+            chrome.storage.sync.set({"variableList": self.variableList})
         })
 
         bus.$on("update:find", function (index, value) {
             self.variableList[index].find = value
+            chrome.storage.sync.set({"variableList": self.variableList})
         })
 
         bus.$on("update:replace", function (index, value) {
             self.variableList[index].replace = value
+            chrome.storage.sync.set({"variableList": self.variableList})
 
         })
     }
@@ -90,7 +96,6 @@ new Vue(
         },
         methods: {
             saveVariables() {
-                chrome.storage.sync.set({"variableList": this.variableList})
                 chrome.storage.sync.set({"coverLetter": this.coverLetter})
                 alert("Settings saved")
             }
