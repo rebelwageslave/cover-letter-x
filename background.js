@@ -1,5 +1,7 @@
-chrome.contextMenus.create({"title": "Paste cover letter", "contexts":["all"], id: "paste_cover_letter"});
 
+chrome.runtime.onInstalled.addListener(function() {
+    chrome.contextMenus.create({"title": "Paste cover letter", "contexts": ["all"], id: "paste_cover_letter"});
+})
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
 
     chrome.storage.sync.get(["coverLetter"], function (data) {
